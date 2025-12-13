@@ -90,3 +90,16 @@ def purchase_sweet(sweet_id: int, db: Session = Depends(get_db)):
     db.refresh(sweet)
 
     return sweet
+
+@router.post("/{sweet_id}/restock", response_model=SweetOut)
+def restock_sweet(sweet_id: int, payload: dict, db: Session = Depends(get_db)):
+    sweet = db.query(Sweet).filter(Sweet.id == sweet_id).first()
+
+    if not sweet:
+        raise HTTPException(status_code=404, detail="Sweet not found")
+
+    sweet.quantity += payload["quantity"]
+    db.commit()
+    db.refresh(sweet)
+
+    return sweet
