@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.database import Base, engine
 
-client = TestClient(app)
+
 
 def setup_function():
     # This runs before each test
@@ -10,7 +10,7 @@ def setup_function():
     Base.metadata.create_all(bind=engine)
 
 
-def test_user_registration():
+def test_user_registration(client):
     response = client.post(
         "/api/auth/register",
         json={
@@ -23,7 +23,7 @@ def test_user_registration():
     assert response.json()["email"] == "test@example.com"
 
 
-def test_user_login():
+def test_user_login(client):
     # First register
     client.post(
         "/api/auth/register",

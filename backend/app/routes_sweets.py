@@ -74,3 +74,19 @@ def delete_sweet(sweet_id: int, db: Session = Depends(get_db)):
 
     db.delete(sweet)
     db.commit()
+
+@router.post("/{sweet_id}/purchase", response_model=SweetOut)
+def purchase_sweet(sweet_id: int, db: Session = Depends(get_db)):
+    sweet = db.query(Sweet).filter(Sweet.id == sweet_id).first()
+
+    if not sweet:
+        raise HTTPException(status_code=404, detail="Sweet not found")
+
+    if sweet.quantity <= 0:
+        raise HTTPException(status_code=400, detail="Sweet out of stock")
+
+    sweet.quantity -= 1
+    db.commit()
+    db.refresh(sweet)
+
+    return sweet

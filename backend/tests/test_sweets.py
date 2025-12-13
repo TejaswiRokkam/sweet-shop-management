@@ -1,14 +1,13 @@
 from fastapi.testclient import TestClient
 from app.main import app
 
-client = TestClient(app)
 
-def test_get_all_sweets_empty():
+def test_get_all_sweets_empty(client):
     response = client.get("/api/sweets")
     assert response.status_code == 200
     assert response.json() == []
 
-def test_add_sweet():
+def test_add_sweet(client):
     response = client.post(
         "/api/sweets",
         json={
@@ -24,7 +23,7 @@ def test_add_sweet():
     assert data["name"] == "Gulab Jamun"
     assert data["quantity"] == 50
 
-def test_search_sweets_by_name():
+def test_search_sweets_by_name(client):
     client.post(
         "/api/sweets",
         json={
@@ -40,7 +39,7 @@ def test_search_sweets_by_name():
     assert len(response.json()) == 1
     assert response.json()[0]["name"] == "Ladoo"
 
-def test_update_sweet():
+def test_update_sweet(client):
     # first add a sweet
     create_response = client.post(
         "/api/sweets",
@@ -67,7 +66,7 @@ def test_update_sweet():
     assert update_response.status_code == 200
     assert update_response.json()["name"] == "Motichoor Ladoo"
 
-def test_delete_sweet():
+def test_delete_sweet(client):
     create_response = client.post(
         "/api/sweets",
         json={
