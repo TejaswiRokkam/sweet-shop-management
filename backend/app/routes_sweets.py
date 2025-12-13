@@ -50,3 +50,18 @@ def add_sweet(sweet: SweetCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_sweet)
     return new_sweet
+
+@router.put("/{sweet_id}", response_model=SweetOut)
+def update_sweet(sweet_id: int, sweet: SweetCreate, db: Session = Depends(get_db)):
+    db_sweet = db.query(Sweet).filter(Sweet.id == sweet_id).first()
+    if not db_sweet:
+        raise HTTPException(status_code=404, detail="Sweet not found")
+
+    db_sweet.name = sweet.name
+    db_sweet.category = sweet.category
+    db_sweet.price = sweet.price
+    db_sweet.quantity = sweet.quantity
+
+    db.commit()
+    db.refresh(db_sweet)
+    return db_sweet
