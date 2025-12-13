@@ -66,3 +66,18 @@ def test_update_sweet():
 
     assert update_response.status_code == 200
     assert update_response.json()["name"] == "Motichoor Ladoo"
+
+def test_delete_sweet():
+    create_response = client.post(
+        "/api/sweets",
+        json={
+            "name": "Jalebi",
+            "category": "Dessert",
+            "price": 12.0,
+            "quantity": 40
+        }
+    )
+    sweet_id = create_response.json()["id"]
+
+    delete_response = client.delete(f"/api/sweets/{sweet_id}")
+    assert delete_response.status_code == 204
