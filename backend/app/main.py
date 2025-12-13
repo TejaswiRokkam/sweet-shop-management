@@ -11,3 +11,7 @@ app.include_router(auth_router)
 @app.get("/")
 def health_check():
     return {"status": "ok"}
+
+from app.routes_sweets import router as sweets_router
+
+app.include_router(sweets_router)
