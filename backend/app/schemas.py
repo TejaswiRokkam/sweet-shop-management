@@ -15,6 +15,12 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
+class SweetCreate(BaseModel):
+    name: str
+    category: str
+    price: float
+    quantity: int
+
 class SweetOut(BaseModel):
     id: int
     name: str
