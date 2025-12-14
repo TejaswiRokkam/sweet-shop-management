@@ -6,7 +6,11 @@ from app.schemas import UserRegister, UserLogin, UserResponse, TokenResponse
 from app.auth import create_access_token, hash_password, verify_password
 import secrets
 from app.dependencies import get_db, get_current_user
+
 router = APIRouter()
+import os
+
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
 
 
 @router.post("/register", status_code=201, response_model=UserResponse)
@@ -18,7 +22,7 @@ def register(user: UserRegister, db: Session = Depends(get_db)):
     new_user = User(
         email=user.email,
         hashed_password=hash_password(user.password),
-        is_admin=False
+        is_admin=(user.email == ADMIN_EMAIL)
     )
     db.add(new_user)
     db.commit()
