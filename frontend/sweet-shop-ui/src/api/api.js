@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:8000/api";
+const BASE_URL = "https://sweet-shop-management-q36x.onrender.com";
 
 export async function apiRequest(endpoint, method = "GET", body) {
   const token = localStorage.getItem("token");
