@@ -138,6 +138,18 @@ Frontend will run at: http://localhost:3000
 
 ## 📸 Screenshots
 
+### 🔑 Login & Register
+![Register and Login Page](screenshots/register-login.png)
+
+### 🍬 Sweets Dashboard
+![Sweets Dashboard](screenshots/dashboard.png)
+
+### 🔍 Search & Filter
+![Search Filter](screenshots/search.png)
+
+### 🧑‍💼 Admin Controls
+![Admin Controls](screenshots/admin.png)
+
 ---
 
 ## 🤖 AI Usage Disclosure
