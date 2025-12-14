@@ -1,4 +1,4 @@
-const BASE_URL = "https://sweet-shop-management-q36x.onrender.com";
+const BASE_URL = "https://sweet-shop-management-q36x.onrender.com/api";
 
 export async function apiRequest(endpoint, method = "GET", body) {
   const token = localStorage.getItem("token");
