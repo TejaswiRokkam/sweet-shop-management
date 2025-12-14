@@ -175,3 +175,12 @@ For earlier exploratory commits, AI was primarily used as a learning and referen
 - Deployment (Docker / cloud)
 - Role management UI
 - Improved test coverage for frontend
+
+---
+## 🌍 Deployment
+
+- Backend deployed on Render at  https://sweet-shop-management-q36x.onrender.com
+- Frontend deployed on Vercel at https://sweet-shop-management-rho.vercel.app/
+
+Due to the use of SQLite, data persistence may reset on redeploy.
+
