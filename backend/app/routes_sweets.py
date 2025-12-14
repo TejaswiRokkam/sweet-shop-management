@@ -1,17 +1,12 @@
 from fastapi import APIRouter, Depends, Query, status, HTTPException 
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
-from app.models import Sweet
+from app.models import Sweet, User
 from app.schemas import SweetOut, SweetCreate
+from app.dependencies import admin_required, get_current_user, get_db
+from app.schemas import RestockPayload
 
-router = APIRouter(prefix="/api/sweets", tags=["sweets"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+router = APIRouter()
 
 @router.get("", response_model=list[SweetOut])
 def list_sweets(db: Session = Depends(get_db)):
@@ -39,7 +34,11 @@ def search_sweets(
     return query.all()
 
 @router.post("", response_model=SweetOut, status_code=status.HTTP_201_CREATED)
-def add_sweet(sweet: SweetCreate, db: Session = Depends(get_db)):
+def add_sweet(
+    sweet: SweetCreate,
+    _: User = Depends(admin_required),
+    db: Session = Depends(get_db)
+):
     new_sweet = Sweet(
         name=sweet.name,
         category=sweet.category,
@@ -52,7 +51,12 @@ def add_sweet(sweet: SweetCreate, db: Session = Depends(get_db)):
     return new_sweet
 
 @router.put("/{sweet_id}", response_model=SweetOut)
-def update_sweet(sweet_id: int, sweet: SweetCreate, db: Session = Depends(get_db)):
+def update_sweet(
+    sweet_id: int,
+    sweet: SweetCreate,
+    _: User = Depends(admin_required),
+    db: Session = Depends(get_db)
+):
     db_sweet = db.query(Sweet).filter(Sweet.id == sweet_id).first()
     if not db_sweet:
         raise HTTPException(status_code=404, detail="Sweet not found")
@@ -67,13 +71,18 @@ def update_sweet(sweet_id: int, sweet: SweetCreate, db: Session = Depends(get_db
     return db_sweet
 
 @router.delete("/{sweet_id}", status_code=204)
-def delete_sweet(sweet_id: int, db: Session = Depends(get_db)):
+def delete_sweet(
+    sweet_id: int,
+    _: User = Depends(admin_required),
+    db: Session = Depends(get_db)
+):
     sweet = db.query(Sweet).filter(Sweet.id == sweet_id).first()
     if not sweet:
         raise HTTPException(status_code=404, detail="Sweet not found")
 
     db.delete(sweet)
     db.commit()
+
 
 @router.post("/{sweet_id}/purchase", response_model=SweetOut)
 def purchase_sweet(sweet_id: int, db: Session = Depends(get_db)):
@@ -92,13 +101,21 @@ def purchase_sweet(sweet_id: int, db: Session = Depends(get_db)):
     return sweet
 
 @router.post("/{sweet_id}/restock", response_model=SweetOut)
-def restock_sweet(sweet_id: int, payload: dict, db: Session = Depends(get_db)):
+def restock_sweet(
+    sweet_id: int,
+    payload: RestockPayload,
+    _: User = Depends(admin_required),
+    db: Session = Depends(get_db)
+):
     sweet = db.query(Sweet).filter(Sweet.id == sweet_id).first()
 
     if not sweet:
         raise HTTPException(status_code=404, detail="Sweet not found")
 
-    sweet.quantity += payload["quantity"]
+    if payload.quantity <= 0:
+        raise HTTPException(status_code=400, detail="Invalid quantity")
+
+    sweet.quantity += payload.quantity
     db.commit()
     db.refresh(sweet)
 

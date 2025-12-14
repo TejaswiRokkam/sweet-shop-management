@@ -3,17 +3,11 @@ from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models import User
 from app.schemas import UserRegister, UserLogin, UserResponse, TokenResponse
-from app.auth import hash_password, verify_password
+from app.auth import create_access_token, hash_password, verify_password
 import secrets
+from app.dependencies import get_db, get_current_user
+router = APIRouter()
 
-router = APIRouter(prefix="/api/auth", tags=["auth"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post("/register", status_code=201, response_model=UserResponse)
 def register(user: UserRegister, db: Session = Depends(get_db)):
@@ -23,22 +17,39 @@ def register(user: UserRegister, db: Session = Depends(get_db)):
 
     new_user = User(
         email=user.email,
-        hashed_password=hash_password(user.password)
+        hashed_password=hash_password(user.password),
+        is_admin=False
     )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
 
-    return {"email": new_user.email}
+    return {
+        "id": new_user.id,
+        "email": new_user.email,
+        "is_admin": new_user.is_admin
+    }
 
 @router.post("/login", response_model=TokenResponse)
 def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
-    if not db_user:
+
+    if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    if not verify_password(user.password, db_user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+    token = create_access_token({
+        "user_id": db_user.id,
+        "is_admin": db_user.is_admin
+    })
 
-    fake_token = secrets.token_hex(16)
-    return {"access_token": fake_token}
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "is_admin": db_user.is_admin
+    }
+
+
+@router.get("/me", response_model=UserResponse)
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
