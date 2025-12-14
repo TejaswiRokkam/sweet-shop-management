@@ -102,7 +102,64 @@ venv\Scripts\activate   # Windows
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
-Backend will run at:http://127.0.0.1:8000
+Backend will run at: http://127.0.0.1:8000
 
-API documentation:http://127.0.0.1:8000/docs
+API documentation: http://127.0.0.1:8000/docs
 
+### 3️⃣ Frontend Setup
+
+```bash
+cd frontend/sweet-shop-ui
+npm install
+npm start
+```
+Frontend will run at: http://localhost:3000
+
+---
+
+## 👩‍💻 User Roles
+
+### Regular User
+
+- Register & login
+- View sweets
+- Search & filter sweets
+- Purchase sweets
+
+### Admin
+
+- All user features
+- Add sweets
+- Update sweets
+- Delete sweets
+- Restock inventory
+
+---
+
+## 📸 Screenshots
+
+---
+
+## 🤖 AI Usage Disclosure
+
+AI tools (ChatGPT) were used during this project in the following ways:
+- Understanding requirements and edge cases
+- Debugging FastAPI and SQLAlchemy issues
+- Refining API design and authorization flow
+- Improving frontend UI structure and styling
+- Guidance on Tailwind CSS usage
+- Clarifying testing strategies and TDD patterns
+
+AI co-author attribution has been added to commits where AI directly contributed to code generation or structural changes.
+
+For earlier exploratory commits, AI was primarily used as a learning and reference tool, while final design and implementation decisions were made and validated manually.
+
+---
+
+## 📈 Future Improvements
+
+- User order history
+- Pagination for sweets list
+- Deployment (Docker / cloud)
+- Role management UI
+- Improved test coverage for frontend
