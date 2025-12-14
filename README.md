@@ -134,6 +134,8 @@ Frontend will run at: http://localhost:3000
 - Delete sweets
 - Restock inventory
 
+Admin users are seeded securely via an environment variable (`ADMIN_EMAIL`) in the deployed environment to avoid exposing admin creation publicly.
+
 ---
 
 ## 📸 Screenshots
