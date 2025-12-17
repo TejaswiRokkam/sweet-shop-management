@@ -49,7 +49,6 @@ This application was developed as part of the **AI Kata – Sweet Shop Managemen
 
 ### Backend
 - FastAPI
-- SQLAlchemy
 - SQLite (persistent, file-based database)
 - JWT authentication (python-jose)
 - Pytest for testing
@@ -89,7 +88,7 @@ A backend test report is included in the repository.
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/sweet-shop-management.git
+git clone https://github.com/TejaswiRokkam/sweet-shop-management.git
 cd sweet-shop-management
 ```
 
