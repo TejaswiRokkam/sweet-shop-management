@@ -3,8 +3,6 @@
 A full-stack Sweet Shop Management System built using **FastAPI**, **SQLite**, and **React**.  
 This project implements secure authentication, role-based access control, inventory management, and a modern interactive user interface.
 
-This application was developed as part of the **AI Kata – Sweet Shop Management System** assignment.
-
 ---
 
 ## 📌 Features
