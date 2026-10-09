@@ -151,22 +151,6 @@ Admin users are seeded securely via an environment variable (`ADMIN_EMAIL`) in t
 
 ---
 
-## 🤖 AI Usage Disclosure
-
-AI tools (ChatGPT) were used during this project in the following ways:
-- Understanding requirements and edge cases
-- Debugging FastAPI and SQLAlchemy issues
-- Refining API design and authorization flow
-- Improving frontend UI structure and styling
-- Guidance on Tailwind CSS usage
-- Clarifying testing strategies and TDD patterns
-
-AI co-author attribution has been added to commits where AI directly contributed to code generation or structural changes.
-
-For earlier exploratory commits, AI was primarily used as a learning and reference tool, while final design and implementation decisions were made and validated manually.
-
----
-
 ## 📈 Future Improvements
 
 - User order history
